@@ -1,0 +1,82 @@
+<div class="signup">
+    <div class="formcont">
+        <div class="page-header">
+            <h2>Join us</h2>
+        </div>
+
+        <form  name="signinform"  ng-submit="register()" novalidate>
+
+            <!-- name & lastname -->
+            <div class="form-field">
+                <label>
+                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                    &nbsp;Name & Last Name :
+                </label><br>
+                <input id="name" type="text" name="name" class="form-control"  placeholder="Enter Name" ng-model="user.name" ng-required="true">
+                <input id="lastn" type="text" name="lastname" class="form-control" placeholder="Enter last Name" ng-model="user.lastname" ng-required="true" ><br>
+            </div>
+            <!-- email bar -->
+            <div class="form-field">
+                <label>
+                    <i class="fa fa-envelope-o" aria-hidden="true"></i>
+                    &nbsp;Email :
+                </label><br>
+                <input type="email"
+                       class="form-control"
+                       name="email" placeholder="Enter Email"
+                       ng-model="user.email" required existed-email=false >
+            </div>
+
+            <!--username bar-->
+            <div class="form-field">
+                <label  >
+                    <i class="fa fa-user-plus" aria-hidden="true"></i>
+                    &nbsp;Username :
+                </label><br>
+                <input type="text" name="username"
+                       class="form-control"
+                       placeholder="Enter Username"
+                       ng-model="user.username"
+                       ng-required="true" existed-username=false>
+            </div>
+
+            <!--password bar-->
+            <div class="form-field">
+                <label  >
+                    <i class="fa fa-lock" aria-hidden="true"></i>
+                    &nbsp;Password :
+                </label><br>
+                <input type="password" class="form-control" name="pwd" placeholder="Enter password" ng-model="user.pwd" ng-required="true">
+            </div>
+
+            <!-- Alert bars-->
+            
+            
+            <div class="error" ng-show="signinform.email.$error.email && signinform.email.$touched">
+                &nbsp;Email is not valid.
+            </div>
+            <div class="error" ng-show="signinform.email.$error.uniqueEmail && signinform.email.$touched">
+                &nbsp;Email exist try again
+            </div>
+            <div class="error" ng-show="signinform.pwd.$invalid && signinform.pwd.$touched">
+                &nbsp;Password is not valid.
+            </div>
+            <div class="error" ng-show="signinform.name.$invalid && signinform.name.$touched">
+                &nbsp;Name is not valid.
+            </div>
+            <div class="error" ng-show="signinform.lastname.$invalid && signinform.lastname.$touched">
+                &nbsp;Last name is not valid.
+            </div>
+            <div class="error" ng-show="signinform.username.$error.uniqueUsername && signinform.username.$touched">
+                &nbsp;Username exist , try another.
+            </div>
+
+            <!--button div -->
+            <div class="form-field">
+                <input ng-disabled="signinform.$invalid" class="button " type="submit" value="Sign Up">
+            </div>
+
+        </form>
+
+    </div>
+</div>

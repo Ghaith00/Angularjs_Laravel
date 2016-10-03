@@ -1,0 +1,136 @@
+html{
+    min-height:100%;/* make sure it is at least as tall as the viewport */
+    position:relative;
+}
+body{
+    height:100%; /* force the BODY element to match the height of the HTML element */
+}
+div.side-bar-menu {
+    background-color: #f8f8f8;
+    width: 20%;
+    height: 100%;
+    position:absolute;
+     overflow:hidden;
+    float: left;
+    border: 1px solid #dff0d8;
+    border-top:none;
+}
+
+
+a.dash-menu-item {
+    position:relative;
+    display:block;
+    width: 100%;
+    padding: 10px 10px 10px 30px;
+    color: #468847;
+    text-decoration-line: none;
+}
+a.dash-menu-item.active {
+    background-color: #dff0d8;
+}
+a.dash-menu-item:hover{
+    color: #55A855;
+    text-decoration-line: none;
+}
+div.side-bar-menu div.input-group{
+    padding: 10% 10% 4% 10%;
+}
+div.bar{
+    margin: 10px 2% 10px 2%;
+    width: 76%;
+    float:right;
+    height: auto;
+}
+div.bar div{
+    margin: 0 0 0 0;
+    border-radius: 0;
+}
+div.page-view{
+    width: 76%;
+    height: auto;
+    margin: 10px 2% 10px 2%;
+    float:right;
+}
+div.page-view > div.panel ,.panel-success > .panel-heading{
+    border-radius: 0;
+}
+ol.breadcrumb{
+    background-color: transparent;
+    margin-top: 6px;
+}
+div.panel{
+    margin-top: 20px;
+    border-radius: 0;
+}
+button.btn{
+    border-radius: 0;
+}
+div.dropdown ul,div.btn-group ul{
+    width:300px;
+    padding: 5px 5px 5px 5px;
+}
+
+
+/*  tasks style */
+span.delete{
+    cursor:pointer;
+    color: #dd2649;
+    padding-left: 10px;
+}
+span.edit{
+    cursor:pointer;
+    color: #3887ca;
+}
+span.change-panel{
+    cursor:pointer;
+    color: #0e1d2e;
+    padding-left: 10px;
+}
+span.change-panel:hover{
+    cursor:pointer;
+    color: #d3d6d3;
+}
+
+span.confirm{
+    cursor:pointer;
+    color: #00b400;
+}
+span.view{
+    color: #807823;
+    cursor:pointer;
+}
+span.delete:hover{
+
+    color: #e46666;
+}
+span.edit:hover{
+    color: #3987ca;
+}
+
+span.confirm:hover{
+    color: #5bb35d;
+}
+span.view:hover{
+    color: #b49459;
+}
+span.yellow{
+    background-color: #ffe13a;
+}
+span.red{
+    background-color: indianred;
+}
+span.blue{
+    background-color: #2a6496;
+}
+span.green{
+    background-color: green;
+}
+
+/* */
+textarea{
+    resize: vertical;
+}
+div.proj-progress-bar {
+    width: 100%;
+    height: 50px;
+}

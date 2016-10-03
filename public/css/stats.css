@@ -1,0 +1,80 @@
+dl {
+  margin: 0;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  background-color: white;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  width: 100%;
+  position: relative;
+  padding: 10px;
+}
+
+dt {
+  -webkit-align-self: flex-start;
+      -ms-flex-item-align: start;
+          align-self: flex-start;
+  width: 100%;
+  font-weight: 700;
+  display: block;
+  text-align: center;
+  font-size: 1.2em;
+  font-weight: 700;
+  margin-bottom: 20px;
+  margin-left: 130px;
+}
+
+.text {
+  font-weight: 600;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  height: 40px;
+  width: 130px;
+  background-color: white;
+  position: absolute;
+  left: 0;
+  -webkit-box-pack: end;
+  -webkit-justify-content: flex-end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+}
+
+.percentage {
+  font-size: .8em;
+  line-height: 1;
+  text-transform: uppercase;
+  height: 40px;
+  margin-left: 130px;
+  background: -webkit-repeating-linear-gradient(left, #ddd, #ddd 1px, #fff 1px, #fff 5%);
+  background: repeating-linear-gradient(to right, #ddd, #ddd 1px, #fff 1px, #fff 5%);
+}
+.percentage:after {
+  content: "";
+  display: block;
+  background-color: #3d9970;
+  width: 50px;
+  margin-bottom: 10px;
+  height: 90%;
+  position: relative;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+  -webkit-transition: background-color .3s ease;
+  transition: background-color .3s ease;
+  cursor: pointer;
+}
+.percentage:hover:after, .percentage:focus:after {
+  background-color: #aaa;
+}
+

@@ -1,0 +1,63 @@
+<div class="panel panel-success">
+    <div class="panel-heading clearfix" >
+        <h5 style="float: left"><i class="fa fa-folder-open-o"></i>
+            &nbsp;&nbsp;Projects
+        </h5>
+        <button class="btn btn-primary pull-right" ui-sref='home.newProject'>
+        Add project &nbsp;<i class="fa fa-plus"></i>
+        </button>
+        <div class="input-group filter" style="margin-right:10px">
+            <span class="input-group-addon" ><i class="fa fa-filter"></i></span>
+            <input type="text" class="form-control" placeholder="Search project" ng-model="projectQuery">
+        </div>
+    </div>
+    <div class="panel-body">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Project Name</th>
+                <th>Deadline</th>
+                <th>Status</th>
+                <th>Nbre of Tasks</th>
+                <th>Complete %</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody >
+                <tr ng-repeat="project in projectList | filter" ng-hide="$index == 0" ng-init='index = $index'>
+                    <td>{{$index}}</td>
+                    <td>{{project.Name}}</td>
+                    <td>{{project.Deadline}}</td>
+                    <td>
+                        <span class="task-status badge" ng-class="statusTheme[project.Status]">
+                            {{getStatus(project.Status)}}
+                        </span>
+                    </td>
+                    <td>{{project.Tasks.length}}</td>
+                    <td>
+                         <div class="progress">
+                            <div class="progress-bar" role="progressbar" aria-valuenow="{{getState(project)}}"
+                                aria-valuemin="0" aria-valuemax="100" style="width:{{getState(project)}}%">
+                                <span>{{getState(project)}}% Complete</span>
+                            </div>
+                        </div>        
+
+                        
+                    </td>
+                    <td>
+                        <span class="delete" n>
+                            <i class="fa fa-trash fa-lg"></i>
+                        </span>
+                        <span class="edit" ng-click="editProject(project)">
+                            <i class="fa fa-pencil fa-lg"></i>
+                        </span>
+                        <span class="view" >
+                            <i class="fa fa-eye fa-lg"></i>
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+ </div>           

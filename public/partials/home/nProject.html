@@ -1,0 +1,218 @@
+<div class="panel panel-success">
+    <div class="panel-heading">
+        <h3 class="panel-title">
+            <i class="fa fa-plus-square-o"></i>
+            &nbsp;New project
+        </h3>
+    </div>
+    <div class="panel-body">
+        <ol class="FormStepList">
+            <li class="FormStepList-item">
+        <span class="FormStepIcon {{NewProjectMenu.theme[0]}}">
+            <span class="FormStepIcon-circle">
+                <i class="fa fa-folder "></i>
+            </span>
+            <span class="FormStepIcon-title">New Project
+                <i class="fa fa-check" ng-hide='projectForm.$invalid'></i>
+            </span>
+        </span>
+            </li>
+            <li class="FormStepList-item">
+        <span class="FormStepIcon {{NewProjectMenu.theme[1]}}">
+            <span class="FormStepIcon-circle">
+                <i class="fa fa-tasks "></i>
+            </span>
+            <span class="FormStepIcon-title">Add Tasks </span>
+        </span>
+            </li>
+            <li class="FormStepList-item">
+        <span class="FormStepIcon {{NewProjectMenu.theme[2]}} FormStepIcon--last">
+            <span class="FormStepIcon-circle">
+                <i class="fa fa-check "></i>
+            </span>
+            <span class="FormStepIcon-title">Check &amp; Confirm</span>
+        </span>
+            </li>
+        </ol>
+        <div class="new-project-container add-project-page">
+        <hr>
+        <div ng-show="NewProjectMenu.index == 0">
+            <form class="form-horizontal" name="projectForm" novalidate>
+                <div class="add-project-well">
+                    <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <i class="fa fa-archive"></i>
+                        </span>
+                        <input class="form-control" type="text" ng-model="newProject.Name" placeholder="Project Name" required>
+                    </div>
+                    </div>
+                    <div class="form-group" >
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <i class="fa fa-edit"></i>
+                        </span>
+                        <textarea class="form-control" ng-model="newProject.Summary" placeholder="Project Summary" ></textarea>
+                    </div>
+                    </div>
+                    <div class="form-group">
+                    <div class="input-group date" >
+                        <span class="input-group-addon">
+                            <i class="fa fa-clock-o"></i>
+                        </span>
+                        <input class="form-control" type="text" ng-model="newProject.Deadline" placeholder="Project Deadline">
+                    </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div ng-show="NewProjectMenu.index == 1">
+            <form class="form-horizontal" name="tasksForm" novalidate>
+                <div class="add-task-well">
+                    <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-addon">
+                        <i class="fa fa-file"></i>
+                    </span>
+                        <input class="form-control" type="text" ng-model="taskSelect.Name" placeholder="Task Name" required>
+                    </div>
+                    </div>
+                    <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-addon">
+                        <i class="fa fa-user"></i>
+                    </span>
+                        <input class="form-control" type="text" ng-model="taskSelect.User" placeholder="Assigne Task to ..." required>
+                    </div>
+                    </div>
+                    <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-addon">
+                        <i class="fa fa-edit"></i>
+                    </span>
+                        <textarea class="form-control"  ng-model="taskSelect.Summary" placeholder="Task Summary " ></textarea>
+                    </div>
+                    </div>
+                    <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-addon">
+                        <i class="fa fa-clock-o"></i>
+                    </span>
+                        <input class="form-control" type="text" ng-model="taskSelect.Deadline" placeholder="Task Deadline" required>
+                    </div>
+                    </div>
+                </div>
+                <button class="add-task-btn btn btn-default" ng-click="addTaskToProject()" ng-disabled="tasksForm.$invalid">
+                    <i class="fa fa-plus fa-5x" ng-show="!editMode"></i>
+                    <i class="fa fa-pencil fa-5x" ng-show="editMode"></i>
+                </button>
+                <hr>
+                <div class="panel panel-default task-item" ng-repeat="task in newProject.Tasks">
+                <div class="panel-heading clearfix">
+                    <i class="fa fa-file-text"></i>&nbsp;&nbsp;&nbsp;
+                    <strong>{{task.Name}}</strong>
+                    <span class="label label-default">{{task.User}}</span>
+                    <span class="change-panel pull-right " ng-click="openPanel($index)">
+                        <i class="fa fa-chevron-right fa-lg" ng-hide="panelStatus[$index]"></i>
+                        <i class="fa fa-chevron-down fa-lg" ng-show="panelStatus[$index]"></i>
+                    </span>
+                    <span class="delete pull-right" ng-click="deleteTask($index)">
+                            <i class="fa fa-trash fa-lg"></i>
+                    </span>
+                    <span class="edit pull-right" ng-click="editTask($index)" ng-show="!editMode">
+                        <i class="fa fa-pencil fa-lg"></i>
+                    </span>
+                </div>
+                <div class="panel-body" ng-hide="!panelStatus[$index]">
+                    {{task.Summary}}
+                    <span class="label label-warning pull-right" >Deadline :&nbsp;{{task.Deadline}}</span>
+                </div>
+            </div>
+            </form>
+        </div>
+        <div ng-show="NewProjectMenu.index == 2">
+            <div class="add-project-well add-project-page">
+                <div class="project-dis">
+                    <div class="title-pad">
+                        <h2>
+                            <i class="fa fa-folder-open-o fa-lg"></i>
+                            &nbsp;{{newProject.Name}}
+                        </h2>
+                    </div>
+                    <div class="info-pad ">
+                  <table class="table table-user-information">
+                    <tbody>
+                      <tr>
+                        <td><strong>Creator :</strong> </td>
+                        <td>{{newProject.User}}</td>
+                      </tr>
+                      <tr>
+                        <td><strong>Deadline:</strong></td>
+                        <td>{{newProject.Deadline}}</td>
+                      </tr>
+                      <tr>
+                        <td><strong>Details :</strong></td>
+                        <td>
+                            <p>{{newProject.Summary}}</p>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                    </div>
+                </div>
+            <div class="tasks-dis">
+                <div class="title-pad">
+                    <h3>
+                        &nbsp;
+                        <i class="fa fa-tasks fa-lg"></i>
+                        &nbsp;Tasks
+                    </h3>
+                </div>
+                <table class="table table-hover table-user-information">
+                    <thead>
+                        <tr >
+                            <th>#</th>
+                            <th>Task Name</th>
+                            <th>Assigned To</th>
+                            <th>Details</th>
+                            <th>Deadline</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="task in newProject.Tasks">
+                            <td >{{$index}}</td>
+                            <td>{{task.Name}}</td>
+                            <td>{{task.User}}</td>
+                            <td>{{task.Summary}}</td>
+                            <td>{{task.Deadline}}</td>
+                        </tr>
+                    </tbody>
+               </table>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <button class="btn btn-success" ng-click="goDown()" ng-disabled="NewProjectMenu.index == 0" >
+        <i class="fa fa-chevron-left"></i> Back
+    </button>
+    <button class="btn btn-default" ui-sref="home">
+        Cancel
+    </button>
+    <button class="btn btn-success" ng-click="goUp()" ng-disabled="NewProjectMenu.index == 2 || projectForm.$invalid" style="float:right;" ng-hide="NewProjectMenu.index == 2">
+        Next&nbsp;<i class="fa fa-chevron-right"></i>
+    </button>
+    <button class="btn btn-primary" style="float:right;" ng-show="NewProjectMenu.index == 2" ng-click="addProject()">
+        <i class="fa fa-check"></i>&nbsp;
+        Submit
+    </button>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+

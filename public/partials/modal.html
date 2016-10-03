@@ -1,0 +1,13 @@
+<div class="modal-header">
+    <h4 class="modal-title">{{model_data.header}}</h4>
+</div>
+<div class="modal-body">
+    <p>{{model_data.body}}</p>
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" type="button" ng-click="ok()" ng-hide="!modalType">Ok</button>
+    <button class="btn btn-success" type="button" ng-click="ok()" ng-hide="modalType">Yes</button>
+    <button class="btn btn-danger" type="button" ng-click="cancel()" ng-hide="modalType">No</button>
+
+</div>

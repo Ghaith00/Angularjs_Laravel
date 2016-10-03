@@ -1,0 +1,76 @@
+<section class="dash">
+    <div class="side-bar-menu" >
+        <div class="input-group">
+            <span class="input-group-addon" ><i class="fa fa-search fa-lg" ></i></span>
+            <input type="text" class="form-control" placeholder="Search" >
+        </div>
+        <hr>
+        <div >
+            <a href="" ui-sref="home.dashdoard" class="dash-menu-item" ui-sref-active="active">
+                <i class="fa fa-dashboard fa-lg"></i>
+                &nbsp;&nbsp;Dashboard
+            </a>
+            <a href="" ui-sref="home.tasks" class="dash-menu-item " ui-sref-active="active" >
+                <i class="fa fa-tasks fa-lg"></i>
+                &nbsp;&nbsp;Tasks
+            </a>
+            <a href="" ui-sref="home.project" class="dash-menu-item " ui-sref-active="active">
+                <i class="fa fa-folder-open-o fa-lg"></i>
+                &nbsp;&nbsp;Projects
+            </a>
+            <a href="" ui-sref="home.newProject" class="dash-menu-item " ui-sref-active="active">
+                <i class="fa fa-plus fa-lg"></i>
+                &nbsp;&nbsp;New Project
+            </a>
+            <a href="" ui-sref="home.notifications" class="dash-menu-item " ui-sref-active="active">
+                <i class="fa fa-bullhorn fa-lg"></i>
+                &nbsp;&nbsp;Notifications
+            </a>
+        </div>
+
+    </div>
+    <div class="bar menu">
+        <div class="panel panel-success">
+            <div class="panel-heading">
+                <i class="fa fa-folder-open fa-lg" ></i>&nbsp;&nbsp;&nbsp;&nbsp;Open Project
+            </div>
+            <div class="panel-body">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-{{projectList[0].Theme}}" ng-click="selectProject(0)">
+                        <i class="fa fa-th"></i>
+                        &nbsp;General
+                    </button>
+                    <button ng-repeat="j in addedProjects" type="button" class="btn btn-{{projectList[j].Theme}}" ng-click="selectProject(j)">
+                            {{projectList[j].Name}}&nbsp;
+                    </button>
+
+                    <div class="btn-group">
+                        <button  class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                            <i class="fa fa-plus"></i>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <div class="input-group">
+                                    <span class="input-group-addon" ><i class="fa fa-search"></i></span>
+                                    <input ng-model="projQuery.Name" class="form-control" placeholder="Search Projects">
+                                </div>
+                            </li>
+                            <li ng-repeat="i in projectList |filter:projQuery as results" ng-init="ind = $index">
+                                <a  href="" ng-hide="i.Name == 'General' " ng-click="selectiveProject(ind)">{{i.Name}}</a>
+                            </li>
+                            <li ng-if="results.length == 0">
+                                No results found...
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-danger" ng-click="closeSelectiveProjects()">
+                    <i class="fa fa-close"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="page-view" ui-view>        
+    </div>
+</section>

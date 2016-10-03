@@ -1,0 +1,32 @@
+<div class="login" >
+    <div class="formcont">
+        <div class="page-header">
+            <h2>Log in to Jungle</h2>
+        </div>
+
+        <form class="form-horizontal"  name="loginform" ng-submit="login()" novalidate>
+            <div class="form-field">
+                <label >
+                    <i class="fa fa-user" aria-hidden="true"></i>
+                    &nbsp;Username :
+                </label>
+                <input type="text" class="form-control"  name="username" placeholder="Enter Username" ng-model="user.username" ng-required="true" >
+            </div>
+            <div class="form-field">
+                <label  >
+                    <i class="fa fa-lock" aria-hidden="true"></i>
+                    &nbsp;Password :
+                </label>
+                <input type="password" class="form-control"  name="pwd" placeholder="Enter password" ng-model="user.pwd" ng-required="true">
+            </div>
+            <!--Alert bar-->
+            <div class="error" ng-show="loginform.username.$invalid && loginform.username.$touched || loginform.pwd.$invalid && loginform.pwd.$touched">
+                Email or Password are not valid.
+            </div>
+            <!-- Login button-->
+            <div class="form-field">
+                <input ng-disabled="loginform.$invalid"  class="button " type="submit" value="Log In" >
+            </div>
+        </form>
+    </div>
+</div>

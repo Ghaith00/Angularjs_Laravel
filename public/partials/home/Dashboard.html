@@ -1,0 +1,138 @@
+    
+      <!-- <form name="type"> 
+        <typeahead update-fn="searchUser(msg)" ng-model='troll' place-holder="put in please" i-Class="fa-lock" ng-disabled="" >       
+        </typeahead>
+        </form> -->
+     
+    <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                Modify Project ... &nbsp;&nbsp;
+                <i class="fa fa-edit"></i>
+            </button>
+            <button type="button" class="btn btn-primary" ui-sref='home.newProject'>
+                Add Project&nbsp;&nbsp;
+                <i class="fa fa-plus"></i>
+            </button>
+            <ul class="dropdown-menu">
+                <li>
+                    <div class="input-group">
+                        <span class="input-group-addon" ><i class="fa fa-search"></i></span>
+                        <input ng-model="projQuery1.Name" class="form-control" placeholder="Search Projects">
+                    </div>
+                </li>
+                <li ng-repeat="i in projectList |filter:projQuery1:strict as results1" ng-init="index = $index">
+                    <a  href="" ng-hide="i.Name == 'General' " ng-click="openProject(index)">{{i.Name}}</a>
+                </li>
+                <li ng-if="results1.length == 0">
+                    No results found...
+                </li>
+            </ul>
+    </div>
+    <!-- tasks -->
+    <div class="panel panel-success div-2 marg-r-2">
+            <div class="panel-heading" >
+            <i class="fa fa-tasks" ></i>&nbsp;&nbsp;&nbsp;&nbsp;Tasks status
+            </div>
+            <div class="panel-body">
+                <!--stats-->
+                <dl>
+                    <style scoped>
+                        .on-going:after {
+                            width: {{getSt(taskstatReq.data[0][0])}}%;
+                        }
+                        .submited:after {
+                            width: {{getSt(taskstatReq.data[0][1])}}%;
+                        }
+                        .completed:after {
+                            width: {{getSt(taskstatReq.data[0][2])}}%;
+                        }
+                        .late:after {
+                            width: {{getSt(taskstatReq.data[0][3])}}%;
+                        }
+                    </style>  
+                    <dd class="percentage" ng-repeat="taskstat in taskstatReq.data[0]" ng-class="taskTypeTheme[$index]">
+                        <span class="text">{{taskType[$index]+' ( '+taskstat+' )'}} </span>
+                
+                    </dd>
+                </dl>
+                <!--END STATS-->    
+                <!-- error handling -->
+                <div class="alert alert-danger" ng-show="taskstatReq.error" ng-bind-html="renderHtml(taskstatReq.error)">
+                </div>
+            </div>
+
+    </div>
+    <!--my tasks-->
+    <div class="panel panel-success div-2 marg-l-2">
+        <div class="panel-heading" >
+            <i class="fa fa-tasks" ></i>&nbsp;&nbsp;&nbsp;&nbsp;My tasks stats
+            </div>
+            <div class="panel-body">
+                <!--stats-->
+                <dl>
+                    <style scoped>
+                        .on-going:after {
+                            width: {{getSt(taskstatReq.data[1][0])}}%;
+                        }
+                        .submited:after {
+                            width: {{getSt(taskstatReq.data[1][1])}}%;
+                        }
+                        .completed:after {
+                            width: {{getSt(taskstatReq.data[1][2])}}%;
+                        }
+                        .late:after {
+                            width: {{getSt(taskstatReq.data[1][3])}}%;
+                        }
+                    </style>  
+                    <dd class="percentage" ng-repeat="taskstat in taskstatReq.data[1]" ng-class="taskTypeTheme[$index]">
+                        <span class="text">{{taskType[$index]+' ( '+taskstat+' )'}} </span>
+                
+                    </dd>
+                </dl>
+                <!--END STATS-->    
+                <!-- error handling -->
+                <div class="alert alert-danger" ng-show="taskstatReq.error" ng-bind-html="renderHtml(taskstatReq.error)">
+                </div>
+            </div>
+    </div>
+
+
+    <!-- projects -->
+    <div class="panel panel-success pull-left" style="width:100%">
+            <div class="panel-heading">
+                <i class="fa fa-archive" ></i>&nbsp;&nbsp;&nbsp;&nbsp;Projects status
+            </div>
+            <div class="panel-body">
+                <table class="table" ng-hide="projectstatReq.error">
+                <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Created projects</th>
+                    <th>My projects</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="index in [0,1,2]">
+                    <td>{{projectType[index]}}</td>
+                    <td>{{projectstatReq.data[index]}}</td>
+                    <td>{{projectstatReq.data[index+3]}}</td>
+                </tr>
+                </tbody>
+                </table>
+                <!-- error handling -->
+                <div class="alert alert-danger" ng-show="projectstatReq.error" ng-bind-html="renderHtml(projectstatReq.error)">
+                </div>
+
+            </div>
+    </div>
+
+    
+    <!--Short cuts>
+    <div class="panel panel-success">
+        <div class="panel-heading">
+                <i class="fa fa-archive" ></i>&nbsp;&nbsp;&nbsp;&nbsp;Short cuts
+            </div>
+            <div class="panel-body">
+                
+            </div>
+    </div>-->

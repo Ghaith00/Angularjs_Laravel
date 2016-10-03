@@ -1,0 +1,236 @@
+<!-- project tasks  -->
+<div ng-hide="selectedTask.menuIndex" class="panel panel-success">
+    <div class="panel-heading clearfix" >
+        <div ng-hide="indexProject" style="float: left;margin-top:7px"><i class="fa fa-list"></i>
+            &nbsp;&nbsp;Projects tasks
+        </div>
+        <div ng-hide="!indexProject" style="float: left;margin-top:7px"><i class="fa fa-list"></i>
+            &nbsp;&nbsp;Project {{projectList[indexProject].Name}} tasks
+        </div>
+        <div class="dropdown pull-right" >
+            <button class="btn btn-primary dropdown-toggle" ng-hide="indexProject" type="button" data-toggle="dropdown" >
+                Add task to project... &nbsp;&nbsp;
+                <i class="fa fa-edit"></i>
+            </button>
+            <button type="button" class="btn btn-success" ng-hide="!indexProject" ng-click="newTask()">
+                Add Task &nbsp;&nbsp;
+                <i class="fa fa-plus-circle"></i>
+            </button>
+            <ul class="dropdown-menu pull-left">
+                <li>
+                    <div class="input-group">
+                        <span class="input-group-addon" ><i class="fa fa-search" ></i></span>
+                        <input type="text" class="form-control" placeholder="Search" ng-model="projQuery2.Name" >
+                    </div>
+                </li>
+                <li ng-repeat="i in projectList |filter:projQuery2:strict as results2" ng-init="index = $index">
+                    <a  href="" ng-hide="i.Name == 'General' " ng-click="selectiveProject(index);newTask();">{{i.Name}}</a>
+                </li>
+                <li ng-if="results2.length == 0">
+                    <strong>No results found...</strong>
+                </li>
+            </ul>
+        </div>
+        <div class="input-group filter">
+            <span class="input-group-addon" ><i class="fa fa-filter"></i></span>
+            <input type="text" class="form-control" placeholder="Search task" ng-model="pTaskQuery">
+        </div>    
+    </div>
+    <div class="panel-body">
+        <table class="table">
+            <thead>
+              <tr>
+                  <th>#</th>
+                  <th>Task Name</th>
+                  <th ng-hide="indexProject">Project</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody  >
+                <tr ng-repeat="task in projectsTasks | filter:pTaskQuery" ng-hide="indexProject && task.Pid != projectList[indexProject].Pid">
+                    <td>{{task.Tid}}</td>
+                    <td>{{task.Name}}</td>
+                    <td ng-hide="indexProject">{{task.Pname}}</td>
+                    <td>
+                        <span class="task-status badge {{statusTheme[task.Status]}}">
+                            {{getStatus(task.Status)}}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="delete" title="remove task" ng-click="handleTask(task.Tid,task.Name,2)">
+                          <i class="fa fa-trash fa-lg"></i>
+                        </span>
+                        <span class="edit" title="edit task" ng-hide="task.Status == 2">
+                          <i class="fa fa-pencil fa-lg" ng-click="editTask(task.Tid)"></i>
+                        </span>
+                        <span class="view" title="view task" ng-click="viewTask(task.Tid)">
+                          <i class="fa fa-eye fa-lg"></i>
+                        </span>
+                        <span class="confirm" title="confirm task" ng-show="task.Status == 1" ng-click="handleTask(task.Tid,task.Name,0)">
+                            <i class="fa fa-check fa-lg "></i>
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <hr>
+    </div>
+</div>
+<!-- My Tasks -->
+<div ng-hide="selectedTask.menuIndex" class="panel panel-success" style="margin-top:15px;">
+    <div class="panel-heading clearfix" >
+        <h5 style="float: left"><i class="fa fa-list"></i>&nbsp;&nbsp;My Tasks</h5>
+        <div class="input-group filter">
+            <span class="input-group-addon" ><i class="fa fa-filter"></i></span>
+            <input type="text" class="form-control" placeholder="Search task">
+        </div>
+    </div>
+    <div class="panel-body">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Task Name</th>
+                <th>Project</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="task in mytasksList" class="task-item">
+                <td>{{task.Tid}}</td>
+                <td>{{task.Name}}</td>
+                <td>{{task.Pname}}</td>
+                <td>
+                    <span class="task-status badge {{statusTheme[task.Status]}}">
+                        {{getStatus(task.Status)}}
+                    </span>
+                </td>
+                <td>
+                    <span class="view" title="view task" ng-click="viewTask(task.Tid)"><i class="fa fa-eye fa-lg"></i></span>
+                    <span class="confirm" title="submit task" ng-show="task.Status == 0" ng-click="handleTask(task.Tid,task.Name,1)">
+                        <i class="fa fa-check fa-lg"></i>
+                    </span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<!-- mang task-->
+<div class="panel panel-success" ng-hide="!selectedTask.menuIndex">
+  <div class="panel-heading clearfix">
+    <div class="pull-left">
+      Task {{selectedTask.status[selectedTask.menuIndex]}}&nbsp;&nbsp;
+      <span class="task-status label {{statusTheme[selectedTask.Info.Status]}}" ng-hide="selectedTask.menuIndex == 3">
+        {{getStatus(selectedTask.Info.Status)}}
+      </span>
+    </div>   
+      
+    <button class="btn btn-default pull-right" ng-hide="selectedTask.menuIndex == 2 || isEdit() || selectedTask.menuIndex == 3" ng-click="editTask(selectedTask.Tid)" >
+        <i class="fa fa-pencil fa-lg"></i>
+        &nbsp;&nbsp;Edit
+    </button>
+    <button class="btn btn-default pull-right" ng-click="backTask()">
+      <i class="fa fa-chevron-left fa-lg"></i>
+    </button>
+
+  </div>
+  <div class="panel-body">
+     <div class="task-mang" >
+      
+      <div class="container">
+          <form class="form-horizontal" name="taskForm" novalidate>
+              <div class="form-group">
+                  <label class="col-sm-2 control-label">Project name</label>
+                  <div class="col-sm-10 input-group">
+                      <span class="input-group-addon">
+                          <i class="fa fa-archive"></i>
+                      </span>
+                      <input class="form-control" type="text" ng-model="selectedTask.Info.Pname" disabled>
+                  </div>
+              </div>
+              <div class="form-group">
+                  <label class="col-sm-2 control-label">Task Creator</label>
+                  <div class="col-sm-10 input-group">
+                       <span class="input-group-addon">
+                          <i class="fa fa-user-secret"></i>
+                      </span>
+                      <input class="form-control" type="text" ng-model="selectedTask.Info.User" disabled>
+                  </div>
+              </div>
+              <div class="form-group">
+                  <label class="col-sm-2 control-label">Task Executor</label>
+                  <div class="col-sm-10 input-group">
+                      <span class="input-group-addon">
+                          <i class="fa fa-user"></i>
+                      </span>
+                      <input class="form-control" type="text" ng-model="selectedTask.Info.ExUser"
+                             placeholder="assigne task to" ng-disabled="selectedTask.menuIndex == 1"
+                             autocomplete="off"
+                             uib-typeahead="User for User in searchUsername($viewValue)"
+                             typeahead-loading="loading"
+                             typeahead-no-results="noResults"
+                             required
+                      />
+                  </div>
+
+                  <div >
+
+                  </div>
+              </div>
+              <div class="form-group">
+                  <label class="col-sm-2 control-label">Task Name</label>
+                  <div class="col-sm-10 input-group">
+                       <span class="input-group-addon">
+                          <i class="fa fa-file-text"></i>
+                      </span>
+                      <input class="form-control" type="text" placeholder="Task Name"
+                             ng-model="selectedTask.Info.Name" ng-disabled="selectedTask.menuIndex == 1" required />
+                  </div>
+              </div>
+              <div class="form-group">
+                  <label class="col-sm-2 control-label">Summary</label>
+                  <div class="col-sm-10 input-group">
+                       <span class="input-group-addon">
+                          <i class="fa fa-edit"></i>
+                      </span>
+                      <textarea class="form-control" placeholder="Task Summary" ng-disabled="selectedTask.menuIndex == 1" ng-model="selectedTask.Info.Summary"></textarea>
+                  </div>
+              </div>
+              <div class="form-group">
+                  <label class="col-sm-2 control-label">Deadline</label>
+                  <div class="col-sm-10 input-group date" >
+                       <span class="input-group-addon">
+                          <i class="fa fa-calendar-times-o"></i>
+                      </span>
+                      <input class="form-control" type="text" placeholder="Task Deadline"
+                             ng-model="selectedTask.Info.Deadline" ng-disabled="selectedTask.menuIndex == 1">
+                  </div>
+
+              </div>
+              <hr>
+              <div class="form-group">
+                  <label class="col-sm-2 control-label"></label>
+                  <div class="col-sm-10 input-group" >
+                      <button class="btn btn-primary " type="submit" ng-click="saveTask()"  style="float: left" ng-disabled="taskForm.$invalid"
+                              ng-show="selectedTask.menuIndex > 1" >
+                          <i class="fa fa-save"></i>    
+                          &nbsp;Save
+                      </button>
+                      <button class="btn btn-default" ng-click="selectedTask.menuIndex = 0;" style="float: left" ng-show="selectedTask.menuIndex > 1">
+                          <i class="fa fa-close"></i>
+                          &nbsp;Cancel
+                      </button>
+                      <div style="float: left ;padding: 5px">
+                          <i ng-show="loading" class="fa fa-spinner fa-spin"></i>
+                          <i class="fa fa-remove" ng-show="noResults && !loading"></i>
+                      </div>
+                  </div>
+              </div>
+          </form>
+      </div>
+    </div>
+  </div>
+</div>
