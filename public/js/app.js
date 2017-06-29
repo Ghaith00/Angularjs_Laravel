@@ -1,133 +1,176 @@
 /**
  * Created by Ghaith on 22/07/2016.
  */
-var myApp = angular.module('myApp',['ui.bootstrap','ngAnimate','ui.router','ngStorage','angular-growl']);
+var myApp = angular.module('myApp',['ui.bootstrap','ngAnimate','ui.router','ngStorage','angular-growl','Auth']);
 /*Const*/
-myApp.constant('BASE_API','http://laravel.angular.com/api');
+myApp.constant('BASE_API','/api');
+myApp.constant('API',{
+  logIn : '/auth/login',
+  signUp : '/auth/signup',
+  state : '/user/state',
+  info : '/user/info',
+  logOut : '/auth/logout',
+  checkUsername : '/check/username',
+  checkEmail : '/check/email',
+});
 
-
-
-/*intialation */
-myApp.run(function(growl,Authentication,$state,$rootScope,$localStorage){
-    Authentication.loggedIn();
-    // redirecting params  'redirectTo'
-    $rootScope.$on('$stateChangeStart', function(evt, to, params) {
-      if (to.redirectTo) {
-        evt.preventDefault();
-        $state.go(to.redirectTo, params, {location: 'replace'})
-      }
-      if (to.onAuth && !$localStorage.token){
-
-        evt.preventDefault();
-        $state.go('main');
-      }
-    });
-
-
+//intialation
+myApp.run(function($rootScope){
+$rootScope.isLoggedIn = false ;
+$rootScope.mainUser = {};
 });
 /*routeprovider service */
-myApp.config(['growlProvider','$urlRouterProvider','$stateProvider','$httpProvider',
-    function(growlProvider,$urlRouteProvider,$stateProvider,$httpProvider){
+myApp.config(function(growlProvider,$stateProvider,$httpProvider){
         growlProvider.globalTimeToLive(3000);
 
-        $urlRouteProvider.otherwise('/main');
+        // check if the user is already logged in
+        var skipIfLoggedIn  = ['$q','Authentication', function($q,Authentication) {
+          var deferred = $q.defer();
+          factoryObject.loggedIn().then(
+            function(response){ deferred.reject();},
+            function(){deferred.resolve();}
+          );
+          return deferred.promise;
+        }];
+        // Authentication filter
+        var loginRequired = function() {
+          var deferred = $q.defer();
+          factoryObject.loggedIn().then(
+            function(response){ deferred.resolve();},
+            function(){ $state.go('login');}
+          );
+          return deferred.promise;
+        };
+
+
         $stateProvider.
         state('main', {/*partial list*/
             url:'/main',
             templateUrl:'partials/main.html',
-            controller:'publicController'
+            controller:'publicController',
+            resolve: {
+              skipIfLoggedIn: skipIfLoggedIn
+            }
         }).
         state('login',{
             url:'/login',
             templateUrl:'partials/login.html',
-            controller:'loginController'
+            controller:'loginController',
+            resolve: {
+              skipIfLoggedIn: skipIfLoggedIn
+            }
         }).
         state('signup',{
             url:'/signup',
             templateUrl:'partials/signup.html',
-            controller:'signupController'
+            controller:'signupController',
+            resolve: {
+              skipIfLoggedIn: skipIfLoggedIn
+            }
 
         }).
         state('profile',{
             url:'/profile',
             templateUrl:'partials/profile.html',
             controller:'profileController',
-            onAuth:'j'
+            resolve: {
+              loginRequired: loginRequired
+            }
         }).
         state('notifications',{
             url:'/notifications',
             templateUrl:'partials/notifications.html',
-            onAuth:'i'
+            resolve: {
+              loginRequired: loginRequired
+            }
         }).
         state('home',{
             url:'/home',
             templateUrl:'partials/home.html',
             controller:'homeController',
             redirectTo: 'home.dashdoard',
-            onAuth:'h'
+            resolve: {
+              loginRequired: loginRequired
+            }
         }).
         state('home.dashdoard',{
             url:'/dashboard',
             templateUrl:'partials/home/Dashboard.html',
             controller:'dashController',
-            onAuth:'g'
+            resolve: {
+              loginRequired: loginRequired
+            }
         }).
         state('home.tasks',{
             url:'/tasks',
             templateUrl:'partials/home/Tasks.html',
             controller:'taskController',
-            onAuth:'f'
+            resolve: {
+              loginRequired: loginRequired
+            }
         }).
         state('home.project',{
             url:'/project',
             templateUrl:'partials/home/Projectpass.html',
             redirectTo:'home.project.view',
-            onAuth:'e'
+            resolve: {
+              loginRequired: loginRequired
+            }
         }).
         state('home.newProject',{
             url:'/new',
-            templateUrl:'partials/home/nProject.html', 
+            templateUrl:'partials/home/nProject.html',
             controller:'projectController',
-            onAuth:'d'
+            resolve: {
+              loginRequired: loginRequired
+            }
         }).
         state('home.project.view',{
             url:'/view',
             templateUrl:'partials/home/Projects.html',
             controller:'projectsController',
-            onAuth:'c'
+            resolve: {
+              loginRequired: loginRequired
+            }
         }).
         state('home.project.edit',{
             url:'/edit',
             templateUrl:'partials/home/eProject.html',
             controller:'editController',
-            onAuth:'b'
+            resolve: {
+              loginRequired: loginRequired
+            }
         }).
         state('home.notifications',{
             url:'/notifications',
             templateUrl:'partials/home/notifications.html',
             controller:'notifController',
-            onAuth:'a'
+            resolve: {
+              loginRequired: loginRequired
+            }
         });
-
+        // Error handler and athentication toekn setter
         $httpProvider.interceptors.push(function ($q, $location, $localStorage,growl) {
                 return {
                     'request': function (config) {
                         config.headers = config.headers || {};
-                        if ($localStorage.token) {
+                        if ($localStorage.token)
                             config.headers.Authorization = 'Bearer ' + $localStorage.token;
-                        }
                         return config;
                     },
                     'responseError': function (response) {
-                        if (response.status === 401 || response.status === 403) {
+                        switch (response.status) {
+                          case 403 :
+                            growl.warning(response.data.error,{title:response.status});
                             delete $localStorage.token;
+                            break ;
+                          default :
+                            growl.warning(response.data.error,{title:response.status});
                         }
-                        growl.warning(response.statusText,{title:response.status});
-                        window.console.log(response)
                         return $q.reject(response);
                     }
                 };
         });
 
     }
-]);
+);

@@ -12,19 +12,30 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('index');
 });
 
 Route::group(['prefix' => 'api'], function() {
-	Route::post('emailcheck','AuthController@emailcheck');
-	Route::post('usercheck','AuthController@usercheck');
+
+  // check group
+  Route::group(['prefix' => 'check'],function(){
+    Route::post('email','CheckController@checkEmail');
+    Route::post('username','CheckController@checkUsername');
+  });
+
+  // auth group
+  Route::group(['prefix' => 'auth'],function(){
     Route::post('login', 'AuthController@login');
     Route::post('signup','AuthController@signup');
-
     Route::group(['middleware' => 'jwt.auth'], function() {
-    	// Log Out
         Route::post('logout', 'AuthController@logout');
-        Route::get('user_info','AuthController@user_info');
-
     });
+  });
+  // user group
+  Route::group(['prefix' => 'user','middleware' => 'jwt.auth'],function(){
+    Route::post('state','UserController@state');
+    Route::get('info/{id}','UserController@info');
+    Route::get('info','UserController@state');
+  });
+
 });

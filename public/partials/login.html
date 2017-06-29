@@ -10,17 +10,17 @@
                     <i class="fa fa-user" aria-hidden="true"></i>
                     &nbsp;Username :
                 </label>
-                <input type="text" class="form-control"  name="username" placeholder="Enter Username" ng-model="user.username" ng-required="true" >
+                <input type="text" class="form-control"  name="email" placeholder="Enter E-mail" ng-model="user.email" ng-required="true" >
             </div>
             <div class="form-field">
                 <label  >
                     <i class="fa fa-lock" aria-hidden="true"></i>
                     &nbsp;Password :
                 </label>
-                <input type="password" class="form-control"  name="pwd" placeholder="Enter password" ng-model="user.pwd" ng-required="true">
+                <input type="password" class="form-control"  name="password" placeholder="Enter password" ng-model="user.password" ng-required="true">
             </div>
             <!--Alert bar-->
-            <div class="error" ng-show="loginform.username.$invalid && loginform.username.$touched || loginform.pwd.$invalid && loginform.pwd.$touched">
+            <div class="error" ng-show="loginform.username.$invalid && loginform.username.$touched || loginform.password.$invalid && loginform.password.$touched">
                 Email or Password are not valid.
             </div>
             <!-- Login button-->
