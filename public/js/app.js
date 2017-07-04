@@ -35,7 +35,6 @@ myApp.config(function(growlProvider,$stateProvider,$urlRouterProvider,$httpProvi
         // Authentication filter
         var loginRequired = ['$state','$q','Authentication','growl',
           function($state,$q,Authentication,growl) {
-            alert('kokok')
             var deferred = $q.defer();
             Authentication.state().then(
               function(response){ deferred.resolve();},
@@ -174,6 +173,7 @@ myApp.config(function(growlProvider,$stateProvider,$urlRouterProvider,$httpProvi
                             break ;
                           default :
                             growl.warning(response.data.error,{title:response.status});
+                            $location.path('/');
                         }
                         return $q.reject(response);
                     }

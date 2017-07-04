@@ -41,7 +41,6 @@ myApp.service('Authentication',
     // Delete the token and set the offline state
     this.unauthorize = function(){
         delete $localStorage.token ;
-        $state.go('main');
     };
     // Grant access to the app
     this.authorize = function(user){
@@ -72,13 +71,18 @@ myApp.service('Authentication',
     };
     //logout
     this.logOut = function(){
-        return $http.post(BASE_API +API.logOut);
+        return $http.post(BASE_API +API.logOut,{token:$localStorage.token})
+            .then(function(response){
+                // Delete token
+                self.unauthorize();
+                return response ;
+            });
     };
     // signup
     this.register = function(user){
-        return $http.post( BASE_API + API.signup,user)
+        return $http.post( BASE_API + API.signUp,user)
             .then(function(response){
-                // If registeration is fine we 
+                // If registeration is fine we
                 if(typeof response.data.error === 'undefined')
                     return self.login(user);
                 else return $q.reject(response);

@@ -2,19 +2,14 @@ myApp.directive('existedEmail',function(Authentication,$q){
     return {
         require: 'ngModel',
         link: function(scope, element, attr, controllers) {
+            // Async function calls the server
             function validateEmail(email) {
-                var deferred = $q.defer();
-                Authentication.checkEmail(email).then(
-                    function(response){
-                        if(response.toString()  == attr.existedEmail) {
-                            deferred.resolve();
-                        } else {
-                            deferred.reject();
-                        }
-                    }
-                );
-                return deferred.promise;
-            }
+                return Authentication.checkEmail(email)
+                  .then(function(response){
+                      if(response.data) return $q.reject();
+                  });
+            };
+
             controllers.$asyncValidators.uniqueEmail = validateEmail ;
         }
     };
@@ -24,21 +19,12 @@ myApp.directive('existedUsername',function(Authentication,$q){
         require: 'ngModel',
         link: function(scope, element, attr, controllers) {
             function validateUsername(username) {
-                var deferred = $q.defer();
-                Authentication.ckeckUsername(username).then(
-                    function(response){
-                        //window.console.log(response.toString(),attr.existedUsername)
-                        if(response.toString() == attr.existedUsername) {
-                            deferred.resolve();
-                        } else {
-                            deferred.reject();
-                        }
-                    }
-                );
-                return deferred.promise;
-            }
+                return Authentication.ckeckUsername(username)
+                  .then(function(response){
+                      if(response.data) return $q.reject();
+                  });
+            };
             controllers.$asyncValidators.uniqueUsername = validateUsername ;
         }
     };
 });
-

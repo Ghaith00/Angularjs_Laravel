@@ -80,10 +80,10 @@ class AuthController extends Controller
     ]);
 
     if ($validator->fails()){
-    	return response()->json('error');
+        return response()->json(['error']);
     } else {
-        JWTAuth::invalidate($request->only('token'));
-        return response()->json('success');
+        JWTAuth::invalidate($credentials['token']);
+        return response()->json(['success']);
     }
   }
 }
