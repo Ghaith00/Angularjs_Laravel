@@ -1,8 +1,8 @@
 /**
  * Created by Ghaith on 22/07/2016.
  */
-var myApp = angular.module('myApp',['ui.bootstrap','ngAnimate','ui.router','ngStorage','angular-growl','Auth']);
-/*Const*/
+var myApp = angular.module('myApp',['ui.bootstrap','ngAnimate','ui.router','ngStorage','angular-growl']);
+// API Consts
 myApp.constant('BASE_API','/api');
 myApp.constant('API',{
   logIn : '/auth/login',
@@ -14,35 +14,40 @@ myApp.constant('API',{
   checkEmail : '/check/email',
 });
 
-//intialation
-myApp.run(function($rootScope){
-$rootScope.isLoggedIn = false ;
-$rootScope.mainUser = {};
-});
+
 /*routeprovider service */
-myApp.config(function(growlProvider,$stateProvider,$httpProvider){
+myApp.config(function(growlProvider,$stateProvider,$urlRouterProvider,$httpProvider){
         growlProvider.globalTimeToLive(3000);
 
         // check if the user is already logged in
-        var skipIfLoggedIn  = ['$q','Authentication', function($q,Authentication) {
+        var skipIfLoggedIn  = ['$state','$q','Authentication', function($state,$q,Authentication) {
           var deferred = $q.defer();
-          factoryObject.loggedIn().then(
-            function(response){ deferred.reject();},
+          Authentication.state().then(
+            function(response){
+              $state.go('home');
+              deferred.reject();
+            },
             function(){deferred.resolve();}
           );
           return deferred.promise;
         }];
+
         // Authentication filter
-        var loginRequired = function() {
-          var deferred = $q.defer();
-          factoryObject.loggedIn().then(
-            function(response){ deferred.resolve();},
-            function(){ $state.go('login');}
-          );
-          return deferred.promise;
-        };
+        var loginRequired = ['$state','$q','Authentication','growl',
+          function($state,$q,Authentication,growl) {
+            alert('kokok')
+            var deferred = $q.defer();
+            Authentication.state().then(
+              function(response){ deferred.resolve();},
+              function(){
+                $state.go('login');
+                growl.warning(response.data.error,{title:response.status});
+              }
+            );
+            return deferred.promise;
+        }];
 
-
+        $urlRouterProvider.otherwise('/main');
         $stateProvider.
         state('main', {/*partial list*/
             url:'/main',
@@ -163,6 +168,9 @@ myApp.config(function(growlProvider,$stateProvider,$httpProvider){
                           case 403 :
                             growl.warning(response.data.error,{title:response.status});
                             delete $localStorage.token;
+                            break ;
+                          case 400 :
+                            console.log("Not logged");
                             break ;
                           default :
                             growl.warning(response.data.error,{title:response.status});

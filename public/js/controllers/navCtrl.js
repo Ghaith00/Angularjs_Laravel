@@ -2,14 +2,17 @@ myApp.controller('navController', function($scope,Authentication,$location,$anch
     $scope.logOut = function(){
         Authentication.logOut();
     };
-    $scope.gotoContact = function() {
-            $state.go('main');
-            $location.hash('contact');
-			$anchorScroll();
+    $scope.isLoggedIn = function(){
+        return Authentication.isAuthenticated();
     };
-	$scope.gotoAboutus = function() {
+    $scope.goToContact = function() {
+        $state.go('main');
+        $location.hash('contact');
+        $anchorScroll();
+    };
+    $scope.goToAboutUs = function() {
         $state.go('main');
         $location.hash('aboutus');
-		$anchorScroll();
+        $anchorScroll();
     };
 });

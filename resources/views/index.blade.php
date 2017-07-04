@@ -9,9 +9,6 @@
     <script src="lib/angular/angular-animate.js"></script>
     <link rel="stylesheet" href="lib/bootstrap/bootstrap.min.css">
     <link href="lib/angular-growl.min.css" rel="stylesheet" media="screen"/>
-    <script src="lib/bootstrap/jquery.min.js"></script>
-    <script src="lib/bootstrap/bootstrap.min.js"></script>
-    <script src="lib/ui-bootstrap-tpls.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.11/ngStorage.min.js"></script>
     <script src="lib/angular-growl.min.js"></script>
 
@@ -45,6 +42,9 @@
     <script src="js/controllers/editCtrl.js"></script>
     <script src="js/services/messagenotif.js"></script>
     <script src="js/controllers/notifCtrl.js"></script>
+    <script src="lib/bootstrap/jquery.min.js"></script>
+    <script src="lib/bootstrap/bootstrap.min.js"></script>
+    <script src="lib/ui-bootstrap-tpls.min.js"></script>
 
 </head >
 @include('angular-app');

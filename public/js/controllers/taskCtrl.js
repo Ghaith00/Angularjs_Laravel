@@ -1,4 +1,4 @@
-var taskC = myApp.controller('taskController',function ($scope,dataIn,dataUp,modals,$rootScope){
+var taskC = myApp.controller('taskController',function ($scope,dataIn,dataUp,modals,Authentication){
     // data rendering
     $scope.statusTheme = ["yellow","blue","green","red"];
     $scope.getStatus = function(status){
@@ -149,7 +149,7 @@ var taskC = myApp.controller('taskController',function ($scope,dataIn,dataUp,mod
     $scope.newTask = function(){
         $scope.selectedTask.Init();
         $scope.selectedTask.Info.Pname = $scope.projectList[$scope.indexProject].Name;
-        $scope.selectedTask.Info.User = $rootScope.mainuser.username ;
+        $scope.selectedTask.Info.User = Authentication.getUser().username ;
         $scope.selectedTask.menuIndex = 3;
         $scope.taskForm.$setPristine();
     };

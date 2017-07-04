@@ -1,7 +1,7 @@
 /**
  * Created by Ghaith on 12/08/2016.
  */
-myApp.controller('projectController',function($scope,$rootScope,dataIn,$state){
+myApp.controller('projectController',function($scope,dataIn,$state,Authentication){
 
     // New project navigation
     $scope.NewProjectMenu = {index:0,theme:["is-active","",""]};
@@ -21,7 +21,7 @@ myApp.controller('projectController',function($scope,$rootScope,dataIn,$state){
     };
 
     //new project data
-    $scope.newProject = {Name:'',Summary:'',User:$rootScope.mainuser.username,Deadline:'',Tasks:[]};
+    $scope.newProject = {Name:'',Summary:'',User:Authentication.getUser(),Deadline:'',Tasks:[]};
     $scope.taskSelect = {Name:'',User:'',Summary:'',Deadline:''};
     $scope.addTaskToProject = function(){
         $scope.newProject.Tasks.push($scope.taskSelect);
@@ -56,5 +56,5 @@ myApp.controller('projectController',function($scope,$rootScope,dataIn,$state){
     if($scope.indexProject){
         $scope.selectProject(-2);
     }
-    
+
 });
