@@ -19,6 +19,12 @@ class CreateTasksTable extends Migration
             $table->timestamp('deadline');
             $table->timestamps();
         });
+        Schema::create('task_user', function (Blueprint $table) {
+            $table->integer('task_id');
+            $table->integer('user_id');
+            $table->primary(['task_id', 'user_id']);
+        });
+
     }
 
     /**
@@ -29,5 +35,6 @@ class CreateTasksTable extends Migration
     public function down()
     {
         Schema::drop('tasks');
+        Schema::drop('task_user');
     }
 }

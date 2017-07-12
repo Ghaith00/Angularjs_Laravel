@@ -37,5 +37,8 @@ Route::group(['prefix' => 'api'], function() {
     Route::get('info/{id}','UserController@info');
     Route::get('info','UserController@state');
   });
-
+  // projects group
+  Route::group(['prefix'=>'project','middleware'=> 'jwt.auth'],function(){
+    Route::get('me','MyProjectController@projects');
+  });
 });

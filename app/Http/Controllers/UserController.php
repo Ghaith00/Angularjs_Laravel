@@ -24,14 +24,20 @@ class UserController extends Controller
       else
         return response()->json(['error' => 'User not found'],404);
   }
-
+  /**
+   * Get authenticated user
+   * @return App\User
+   */
+  public static function getUser(){
+    return JWTAuth::parseToken()->authenticate();
+  }
   /**
    * Get user info from the JWT token
    *
    * @return \Illuminate\Http\JsonResponse
    */
   public function state(){
-      $user = JWTAuth::parseToken()->authenticate();
+      $user = self::getUser();
       if ((isset($user))) return response()->json($user);
       else response()->json(['error' => 'Unauthorized'],403);
   }

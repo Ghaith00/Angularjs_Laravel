@@ -15,11 +15,16 @@ class CreateProjectsTable extends Migration
         Schema::create('projects', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->integer('user_id')->unsigned(); 
+            $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users');
             $table->text('description');
             $table->timestamp('deadline');
             $table->timestamps();
+        });
+        Schema::create('project_task', function (Blueprint $table) {
+            $table->integer('task_id');
+            $table->integer('project_id');
+            $table->primary(['project_id','task_id']);
         });
     }
 
@@ -31,5 +36,6 @@ class CreateProjectsTable extends Migration
     public function down()
     {
         Schema::drop('projects');
+        Schema::drop('project_task');
     }
 }

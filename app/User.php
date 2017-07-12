@@ -23,4 +23,11 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
     ];
+
+    /**
+     * Get projects of given the user
+     */
+     public function projects(){
+        return $this->hasMany('App\Project');
+     }
 }

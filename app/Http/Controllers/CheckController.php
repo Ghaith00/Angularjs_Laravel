@@ -37,6 +37,6 @@ class CheckController extends Controller
           'username' => 'required|unique:users'
       ]);
       return response()->json($validator->fails());
-}
+  }
 
 }
