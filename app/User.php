@@ -25,9 +25,15 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get projects of given the user
+     * The projects that belong to the user
      */
-     public function projects(){
-        return $this->hasMany('App\Project');
-     }
+    public function projects(){
+      return $this->hasMany('App\Project');
+    }
+    /**
+     * The tasks that belong to the user 
+     */
+    public function tasks(){
+      return $this->belongsToMany('App\Task', 'task_user', 'user_id', 'task_id');
+    }
 }

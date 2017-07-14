@@ -39,7 +39,7 @@ Route::group(['prefix' => 'api'], function() {
   });
   // projects group
   Route::group(['prefix'=>'project','middleware'=> 'jwt.auth'],function(){
-    Route::get('me','MyProjectController@projects');
-    Route::post('new','MyProjectController@newProject');
+    Route::get('me','ProjectController@projects');
+    Route::post('new','ProjectController@newProject');
   });
 });

@@ -21,11 +21,6 @@ class CreateProjectsTable extends Migration
             $table->timestamp('deadline');
             $table->timestamps();
         });
-        Schema::create('project_task', function (Blueprint $table) {
-            $table->integer('task_id');
-            $table->integer('project_id');
-            $table->primary(['project_id','task_id']);
-        });
     }
 
     /**
@@ -36,6 +31,5 @@ class CreateProjectsTable extends Migration
     public function down()
     {
         Schema::drop('projects');
-        Schema::drop('project_task');
     }
 }

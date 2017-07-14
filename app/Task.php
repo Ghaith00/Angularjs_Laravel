@@ -21,4 +21,11 @@ class Task extends Model
    {
        return $this->belongsTo('App\Project');
    }
+   /**
+    * The users that belong to the task.
+    */
+   public function users()
+   {
+       return $this->belongsToMany('App\User');
+   }
 }
