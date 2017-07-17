@@ -14,11 +14,52 @@ use App\Task;
 class ProjectController extends Controller
 {
     /**
-    * API returns all user projects
-    *
-    * @return \Illuminate\Http\JsonResponse
-    */
-    public function projects(){
+     *  Remove link from user and task
+     *
+     * @param String $projectId
+     * @return \Illuminate\Http\JsonResponse
+     */
+    private function detachUsersFromTask($projectId){
+      $tasks = Task::where('project_id',$projectId)->get();
+      foreach ($tasks as $task) {
+        $task->users()->detach();
+      }
+    }
+
+    /**
+     *  API delete project with given id
+     *
+     * @param String $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function delete($id){
+      $project  = Project::find($id);
+      $user = UserController::getUser();
+
+      // check if project exist
+      if (!isset($project))
+        return response()->json(['error'=>'The project does not exist']);
+
+      // check if user is project owner
+      if (strcmp($user->id, $project->user_id) !== 0){
+        return response()->json(['error'=>'You are not admin of this project']);
+      }
+
+      // detach user from task (pivot table)
+      $this->detachUsersFromTask($project->id);
+
+      // delete project
+      $project->delete();
+
+      return response()->json(['success']);
+
+    }
+    /**
+      * API returns all user projects
+      *
+      * @return \Illuminate\Http\JsonResponse
+      */
+    public function all(){
       $user = UserController::getUser();
       if (isset($user)){
         $projects = $user->projects();
@@ -29,7 +70,7 @@ class ProjectController extends Controller
     /**
     * Mapping the request to create and save the task model (No checking)
     *
-    * @param Array $taskObjec
+    * @param Array $taskObject
     * @param String $projectId
     * @return Boolean
     */
@@ -67,26 +108,40 @@ class ProjectController extends Controller
     */
     public function linkUserToTask($userId, $taskId){
       // Check if the request data are complete
-      /*$validator = Validator::make(['user_id'=>$userId, 'task_id'=>$taskId], [
+      $validator = Validator::make(['user_id'=>$userId, 'task_id'=>$taskId], [
            'user_id' => 'required|exists:users,id',
            'task_id' => 'required|exists:tasks,id',
       ]);
       if ($validator->fails())
         return false ;
-      else {*/
-        $user = User::find("1");
+      else {
+        $user = User::find($userId);
         $user->tasks()->attach($taskId);
         return true ;
-      //}
+      }
     }
-
     /**
-    * Mapping and saving the request to create the project model (No checking)
-    *
-    * @param Request $request
-    * @param String $userId
-    * @return Array
-    */
+     *  Map the request and return project
+     *
+     * @param Request $request
+     * @param String $userId
+     * @return App\Project
+     */
+    private function mapProject(Request $request, $userId){
+      $project = new Project();
+      $project->name = $request->name;
+      $project->description = $request->description;
+      $project->deadline = $request->deadline;
+      $project->user_id = $userId ;
+      return $project;
+    }
+    /**
+      * Saving the request to create the project model (No checking)
+      *
+      * @param Request $request
+      * @param String $userId
+      * @return Array
+      */
     private function saveProject(Request $request, $userId){
       // Check if the request data are complete
       $requestArray = $request->only('name', 'deadline','description','tasks');
@@ -99,11 +154,8 @@ class ProjectController extends Controller
       if ($validator->fails())
         return $validator->errors();
       else {
-        $project = new Project();
-        $project->name = $request->name;
-        $project->description = $request->description;
-        $project->deadline = $request->deadline;
-        $project->user_id = $userId ;
+        // save project
+        $project = $this->mapProject($request, $userId);
         $project->save();
 
         // saving the tasks
@@ -122,7 +174,7 @@ class ProjectController extends Controller
     * @param Request $request
     * @return \Illuminate\Http\JsonResponse
     */
-    public function newProject(Request $request){
+    public function new(Request $request){
       //get the current user
       $user = UserController::getUser();
 
