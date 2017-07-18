@@ -6,6 +6,7 @@ use JWTAuth ;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Responses\JsonResponse;
 use Validator;
 use App\User ;
 use App\Project;
@@ -38,11 +39,11 @@ class ProjectController extends Controller
 
       // check if project exist
       if (!isset($project))
-        return response()->json(['error'=>'The project does not exist']);
+        return JsonResponse::projectNotFound();
 
       // check if user is project owner
       if (strcmp($user->id, $project->user_id) !== 0){
-        return response()->json(['error'=>'You are not admin of this project']);
+        return JsonResponse::notProjectOwner();
       }
 
       // detach user from task (pivot table)
@@ -62,7 +63,7 @@ class ProjectController extends Controller
     public function all(){
       $user = UserController::getUser();
       if (isset($user)){
-        $projects = $user->projects();
+        $projects = $user->projects()->get();
         return response()->json($projects);
       }
     }
