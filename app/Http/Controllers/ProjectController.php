@@ -52,7 +52,7 @@ class ProjectController extends Controller
       // delete project
       $project->delete();
 
-      return response()->json(['success']);
+      return JsonResponse::success();
 
     }
     /**
@@ -136,14 +136,14 @@ class ProjectController extends Controller
       $project->user_id = $userId ;
       return $project;
     }
+
     /**
-      * Saving the request to create the project model (No checking)
-      *
-      * @param Request $request
-      * @param String $userId
-      * @return Array
-      */
-    private function saveProject(Request $request, $userId){
+     * get Project validation
+     *
+     * @param Request $request
+     * @return validation
+     */
+    private function getProjectValidation(Request $request){
       // Check if the request data are complete
       $requestArray = $request->only('name', 'deadline','description','tasks');
       $validator = Validator::make($requestArray, [
@@ -151,7 +151,18 @@ class ProjectController extends Controller
            'deadline' => 'required|max:255',
            'description' => 'required'
       ]);
+      return $validator;
+    }
 
+    /**
+     * API Saving the request to create the project model (No checking)
+     *
+     * @param Request $request
+     * @param String $userId
+     * @return Array
+     */
+    private function saveProject(Request $request, $userId){
+      $validator = $this->getProjectValidation($request);
       if ($validator->fails())
         return $validator->errors();
       else {
@@ -164,8 +175,7 @@ class ProjectController extends Controller
         foreach ($request->tasks as $task) {
           $this->saveTask($task, $project->id);
         }
-
-        return ['success'];
+        return JsonResponse::success();
       }
     }
 
@@ -179,8 +189,12 @@ class ProjectController extends Controller
       //get the current user
       $user = UserController::getUser();
 
-      if (isset($user))
-          return response()->json($this->saveProject($request, $user->id));
+      if (isset($user)){
+        if ($this->saveProject($request, $user->id))
+          return JsonResponse::success();
+        else
+          return JsonResponse::newProjectError();
+      }
     }
 
 }

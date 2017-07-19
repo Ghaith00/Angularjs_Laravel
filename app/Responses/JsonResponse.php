@@ -19,7 +19,7 @@
     }
 
     /**
-     *  construct not found project error response
+     *  construct "not found project" error response
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -29,19 +29,40 @@
       $response->code = 'project_not_found';
       return response()->json($response);
     }
+    
     /**
-     *  construct not project owner error response
+     *  construct "not project owner" error response
      *
-    * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function notProjectOwner(){
+    public static function notProjectOwner(){
       $response = self::format();
       $response->error = true;
       $response->code = 'not_project_owner';
       return response()->json($response);
     }
 
+    /**
+     * construct "success" response
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public static function success(){
+      $response = self::format();
+      $response->success = true;
+      $response->code = 'success';
+      return response()->json($response);
+    }
+
+    /**
+     * Construct "new project error" response
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public static function newProjectError(){
+      $response = self::format();
+      $response->error = true;
+      $response->code = 'new_project_error';
+      return response()->json($response);
+    }
   }
-
-
- 
