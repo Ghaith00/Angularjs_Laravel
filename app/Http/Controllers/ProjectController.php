@@ -56,6 +56,34 @@ class ProjectController extends Controller
 
     }
     /**
+     *  API update project with given id
+     *
+     * @param String $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function update($id){
+      $project  = Project::find($id);
+      $user = UserController::getUser();
+
+      // check if project exist
+      if (!isset($project))
+        return JsonResponse::projectNotFound();
+
+      // check if user is project owner
+      if (strcmp($user->id, $project->user_id) !== 0){
+        return JsonResponse::notProjectOwner();
+      }
+
+      // update project
+      $project->name = $request->name;
+      $project->description = $request->description;
+      $project->deadline = $request->deadline;
+      $project->save();
+
+      return JsonResponse::success();
+    }
+
+    /**
       * API returns all user projects
       *
       * @return \Illuminate\Http\JsonResponse
@@ -68,38 +96,7 @@ class ProjectController extends Controller
       }
     }
 
-    /**
-    * Mapping the request to create and save the task model (No checking)
-    *
-    * @param Array $taskObject
-    * @param String $projectId
-    * @return Boolean
-    */
-    private function saveTask(Array $taskObject, $projectId){
-      // Check if the request data are complete
-      $validator = Validator::make($taskObject, [
-          'name' => 'required|max:255',
-          'deadline' => 'required|max:255',
-          'description' => 'required',
-      ]);
-      if ($validator->fails())
-       return false ;
-      else {
-       $task = new Task();
-       $task->name = $taskObject['name'] ;
-       $task->description = $taskObject['description'] ;
-       $task->deadline = $taskObject['deadline'] ;
-       $task->project_id = $projectId;
-       $task->save();
-       if (!empty($taskObject['users'])){
-         //link the users to the task
-         foreach ($taskObject['users'] as $userId) {
-            $this->linkUserToTask($userId, $task->id);
-         }
-       }
-       return true ;
-      }
-    }
+
     /**
     * link the user to task
     *
@@ -173,7 +170,7 @@ class ProjectController extends Controller
         // saving the tasks
         $tasks = [];
         foreach ($request->tasks as $task) {
-          $this->saveTask($task, $project->id);
+          TaskContoller::saveTask($task, $project->id);
         }
         return JsonResponse::success();
       }
