@@ -18,31 +18,41 @@ Route::get('/', function () {
 Route::group(['prefix' => 'api'], function() {
 
   // check group
-  Route::group(['prefix' => 'check'],function(){
-    Route::post('email','CheckController@checkEmail');
-    Route::post('username','CheckController@checkUsername');
+  Route::group(['prefix' => 'check'], function(){
+    Route::post('email', 'CheckController@checkEmail');
+    Route::post('username', 'CheckController@checkUsername');
   });
 
   // auth group
-  Route::group(['prefix' => 'auth'],function(){
+  Route::group(['prefix' => 'auth'], function(){
     Route::post('login', 'AuthController@login');
-    Route::post('signup','AuthController@signup');
+    Route::post('signup', 'AuthController@signup');
     Route::group(['middleware' => 'jwt.auth'], function() {
         Route::post('logout', 'AuthController@logout');
     });
   });
   // user group
-  Route::group(['prefix' => 'user','middleware' => 'jwt.auth'],function(){
-    Route::post('state','UserController@state');
-    Route::get('info/{id}','UserController@info');
-    Route::get('info','UserController@state');
+  Route::group(['prefix' => 'user','middleware' => 'jwt.auth'], function(){
+    Route::post('state', 'UserController@state');
+    Route::get('info/{id}', 'UserController@info');
+    Route::get('info', 'UserController@state');
   });
   // projects group
-  Route::group(['prefix'=>'project','middleware'=> 'jwt.auth'],function(){
-    Route::get('me','ProjectController@all');
-    Route::post('new','ProjectController@new');
-    Route::delete('{id}','ProjectController@delete');
+  Route::group(['prefix'=>'project','middleware'=> 'jwt.auth'], function(){
+    Route::get('all', 'ProjectController@all');
+    Route::put('new', 'ProjectController@new');
+    Route::post('{id}/update', 'ProjectController@update');
+    Route::post('{id}', 'ProjectController@get');
+    Route::delete('{id}', 'ProjectController@delete');
   });
+
+  /* task group
+  Route::group(['prefix' => 'task', 'middleware'=> 'jwt.auth'], function(){
+    Route::get('all', 'TaskContoller@all');
+    Route::put('new/{project-id}', 'TaskController@new');
+    Route::put('{id}/update', 'TaskController@update');
+    Route::delete('{id}', 'TaskController@delete');
+  });*/
 
 
 });
