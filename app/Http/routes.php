@@ -42,7 +42,10 @@ Route::group(['prefix' => 'api'], function() {
     Route::get('all', 'ProjectController@all');
     Route::put('new', 'ProjectController@new');
     Route::post('{id}/update', 'ProjectController@update');
+<<<<<<< HEAD
     Route::post('{id}', 'ProjectController@get');
+=======
+>>>>>>> a22ca66df00d57a32d7cc3e372b544427cba4a2c
     Route::delete('{id}', 'ProjectController@delete');
   });
 

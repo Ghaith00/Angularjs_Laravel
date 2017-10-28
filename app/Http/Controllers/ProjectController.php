@@ -85,6 +85,34 @@ class ProjectController extends Controller
     }
 
     /**
+     *  API update project with given id
+     *
+     * @param String $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function update($id){
+      $project  = Project::find($id);
+      $user = UserController::getUser();
+
+      // check if project exist
+      if (!isset($project))
+        return JsonResponse::projectNotFound();
+
+      // check if user is project owner
+      if (strcmp($user->id, $project->user_id) !== 0){
+        return JsonResponse::notProjectOwner();
+      }
+
+      // update project
+      $project->name = $request->name;
+      $project->description = $request->description;
+      $project->deadline = $request->deadline;
+      $project->save();
+
+      return JsonResponse::success();
+    }
+
+    /**
       * API returns all user projects
       *
       * @return \Illuminate\Http\JsonResponse
